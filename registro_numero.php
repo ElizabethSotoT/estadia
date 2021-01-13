@@ -63,8 +63,6 @@ session_start();
 							$resultado = @move_uploaded_file($_FILES["archivo"]["tmp_name"], $archivo);
 
 							if($resultado){
-								echo $archivo;
-								echo $id_insert;
 								echo "Archivo guardado";
 							} else{
 								echo "Error al guardar archivo";

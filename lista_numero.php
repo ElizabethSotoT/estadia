@@ -44,6 +44,7 @@ session_start();
                         <th>Fecha de elaboración</th>
                         <th>Fecha de entrega</th>
                         <th>Estatus</th>
+                        <th>Documento</th>
                         <th>Acción</th>
                     </tr>
                     <?php
@@ -59,13 +60,13 @@ session_start();
 					}
 					$desde=($pagina-1)*$por_pagina;
 					$total_paginas= ceil($total_registro/$por_pagina);
-					$query= mysqli_query($conection,"select n.id_numero, n.folio, p.clave, p.propietario, n.numero1, n.numero2,
-														n.orden_p, n.costo,	n.fecha1, n.fecha2, n.fecha3, n.estatus 
+					$query= mysqli_query($conection,"SELECT n.id_numero, n.folio, p.clave, p.propietario, n.numero1, n.numero2,
+														n.orden_p, n.costo,	n.fecha1, n.fecha2, n.fecha3, n.estatus, n.urlfile
 													 from numero_oficial n 
                                                      inner join predios p on n.id_predio= p.id_predio
-													 order by id_numero asc
-					LIMIT $desde,$por_pagina
+													 order by id_numero asc	LIMIT $desde,$por_pagina
 					");
+															
 						mysqli_close($conection);
 					$result=mysqli_num_rows($query);
 					if($result>0){
@@ -83,7 +84,11 @@ session_start();
                         <td><?php echo $data['fecha1']; ?></td>
                         <td><?php echo $data['fecha2']; ?></td>
                         <td><?php echo $data['fecha3']; ?></td>
-                        <td><?php echo $data['estatus']; ?></td>
+                        <td><?php echo $data['estatus']; ?></td>                 
+                       <td>
+                        	<a href="<?php echo $data['urlfile']; ?>" target="_blank" class="btn_new">Ver</a>
+
+                        </td>
                         <td>
                         	<a class="link_edit" href="editar_numero.php?id=<?php echo $data['id_numero']; ?>">Editar</a>
                             |
