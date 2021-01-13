@@ -47,7 +47,7 @@ session_start();
 					echo "Error al cargar archivo";
 				} else{
 					$permitidos = array("application/pdf");
-					$limite_kb = 200;
+					$limite_kb = 500;
 
 					if(in_array($_FILES["archivo"]["type"], $permitidos) && $_FILES["archivo"]["size"] <= $limite_kb * 1024){
 
@@ -73,7 +73,7 @@ session_start();
 					}
 
 				}
-
+				$sql2 = mysqli_query($conection, "INSERT INTO files (id_numero, url) values ('$id_insert', '$archivo')");
 				
 				if($sql){
 					$alert='<p class="msg_save">No. Oficial registrado correctamente</p>';
