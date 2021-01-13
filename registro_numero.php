@@ -27,8 +27,7 @@ session_start();
 			$fecha2= $_POST['fecha2'];
 			$fecha3= $_POST['fecha3'];
 			$estatus= $_POST['estatus'];
-//			$usuario_id=$_SESSION['idUser'];
-			//echo $folio, $predio, $numero1, $numero2, $orden, $costo, $fecha1, $fecha2, $estatus, $usuario_id;
+
 			$query= mysqli_query($conection, "select * from numero_oficial where folio = '$folio'");
 				//mysqli_close($conection);
 			$result= mysqli_fetch_array($query);
@@ -36,10 +35,47 @@ session_start();
 				$alert='<p class="msg_error">El folio del número ya existe</p>';	
 			}else{
 				
-				$query_insert= mysqli_query($conection,"insert into 
+				$sql= mysqli_query($conection,"insert into 
 				numero_oficial (folio, id_predio, numero1, numero2, orden_p, fecha1, fecha2, fecha3, costo, estatus, usuario_id)
 				values ('$folio', '$clave2', '$numero1', '$numero2', '$orden', '$fecha1', '$fecha2', '$fecha3', '$costo', '$estatus', '4')");
-				if($query_insert){
+				
+				//codigo para guardar pdf
+				$resultado = mysqli_query($conection,$sql);
+				$id_insert = mysqli_insert_id($conection);
+
+				if($_FILES["archivo"]["error"]>0){
+					echo "Error al cargar archivo";
+				} else{
+					$permitidos = array("application/pdf");
+					$limite_kb = 200;
+
+					if(in_array($_FILES["archivo"]["type"], $permitidos) && $_FILES["archivo"]["size"] <= $limite_kb * 1024){
+
+						$ruta = 'files/'.$id_insert.'/';
+						$archivo = $ruta.$_FILES["archivo"]["name"];
+
+						//si no existe carpeta, la crea
+						if(!file_exists($ruta)){
+							mkdir($ruta);
+						}
+
+						if(!file_exists($archivo)){
+							$resultado = @move_uploaded_file($_FILES["archivo"]["tmp_name"], $archivo);
+
+							if($resultado){
+								echo "Archivo guardado";
+							} else{
+								echo "Error al guardar archivo";
+							}
+						} else {
+							echo "Archivo ya existe";
+						}
+					}
+
+				}
+
+				
+				if($sql){
 					$alert='<p class="msg_save">No. Oficial registrado correctamente</p>';
 				}else{
 					$alert='<p class="msg_error">Error al registrar el No. Oficial</p>';
@@ -74,16 +110,12 @@ session_start();
     <h1><i class="fas fa-dice-five"></i> Registro Núm. Oficial</h1>
     <hr>
     <div class="alert"><?php echo isset($alert) ? $alert:''; ?></div>
-    <form action="" method="post">
+    <form action="" method="POST" enctype="multipart/form-data">
     	<label for="folio">Folio</label>
         <input type="text" name="folio" id="folio" placeholder="Folio del No. Oficial">
-
-
     	<label for="clave">Predio</label>
         <input type="text" name="clave" id="clave" class="form-control" placeholder="Ingresa la clave del predio"/>  
         <div id="claveList"></div> 
-
-
         <label for="numero1">Número</label>
         <input type="text" name="numero1" id="numero1" placeholder="Número asignado">
         <label for="numero2">Número (texto)</label>
@@ -105,6 +137,12 @@ session_start();
        	    <option>Firmado</option>
        	    <option>Entregado</option>
          </select>
+         <!--Form para subir pdf 12/Enero/2021-->
+           	<div>    	
+	    		<label for="archivo">Subir archivo</label>
+	        	<input type="file" id="archivo" name="archivo" accept="application/pdf"/>
+	    	</div>		 		
+
         <input type="submit" value="Crear Número Oficial" class="btn_save">        
     </form>
     
