@@ -63,6 +63,8 @@ session_start();
 							$resultado = @move_uploaded_file($_FILES["archivo"]["tmp_name"], $archivo);
 
 							if($resultado){
+								echo $archivo;
+								echo $id_insert;
 								echo "Archivo guardado";
 							} else{
 								echo "Error al guardar archivo";
@@ -73,7 +75,8 @@ session_start();
 					}
 
 				}
-				$sql2 = mysqli_query($conection, "INSERT INTO files (id_numero, url) values ('$id_insert', '$archivo')");
+
+				$sql2 = mysqli_query($conection, "UPDATE numero_oficial SET urlfile ='$archivo' where id_numero = '$id_insert'");
 				
 				if($sql){
 					$alert='<p class="msg_save">No. Oficial registrado correctamente</p>';
