@@ -6,7 +6,7 @@ include "conexion.php";
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Lista de Predios</title>
+	<title>Lista de domicilios</title>
 	<?php include "includes/scripts.php"; ?>
 </head>
 <body>
@@ -14,11 +14,10 @@ include "conexion.php";
 	<section class="main">
 <?php include "includes/wrapp.php"; ?>
 
- 
 			<div class="articulo">
-				<H1><i class="far fa-map"></i> Lista de Predios</H1>
-                <a href="registro_predio.php" class="btn_new">Crear predio</a>
-                <form action="buscar_predio.php" method="get" class="form_search">
+				<H1><i class="far fa-address-book"></i> Lista de domicilios</H1>
+                <a href="registro_domicilio.php" class="btn_new">Crear domicilio</a>
+                <form action="buscar_domicilio.php" method="get" class="form_search">
                 	<input type="text" name="busqueda" id="busqueda" placeholder="buscar">
                     <input type="submit" value="buscar" class="btn_search">
                 </form>
@@ -26,18 +25,24 @@ include "conexion.php";
                 <table>
                 	<tr>
                     	<th>ID</th>
-                        <th>Clave</th>
-                        <th>Manzana</th>
-                        <th>Lote</th>
-                        <th>Superficie</th>
-                        <th>Propietario</th>
                         <th>Calle</th>
-                        <th>Número</th>
-                        <th>Colonia</th>
+                        <th>No. exterior</th>
+                        <th>No. interior</th>
+                        <th>Tipo</th>
+                        <th>C.P.</th>
+                        <th>Ciudad</th>
+                        <th>Estado</th>
+                        <th>Predio superficie</th>
+                        <th>Clave catastral</th>
+                        <th>Norte</th>
+                        <th>Sur</th>
+                        <th>Este</th>
+                        <th>Oeste</th>
+                        <th>Opciones</th>
                     </tr>
                     <?php
 					//paginador
-					$sql_registe=mysqli_query($conection,"select count(*) as total_registro from predios where estatus=1");
+					$sql_registe=mysqli_query($conection,"select count(*) as total_registro from domicilios_personas");
 					$result_register=mysqli_fetch_array($sql_registe);
 					$total_registro=$result_register['total_registro'];
 					$por_pagina=5;
@@ -48,10 +53,7 @@ include "conexion.php";
 					}
 					$desde=($pagina-1)*$por_pagina;
 					$total_paginas= ceil($total_registro/$por_pagina);
-					$query= mysqli_query($conection,"select p.id_predio, p.clave, p.manzana,p.lote, p.superficie, p.propietario, p.calle1, 
-															p.numero1, a.nombre 
-													 from predios p inner join asentamientos a on p.id_colonia= a.id_asent 
-													 WHERE estatus=1 order by id_predio asc
+					$query= mysqli_query($conection,"SELECT id_domicilio, calle1, numero_exterior, numero_interior, tipo, codigo_postal, ciudad, estado, predio_superficie, clave_catastral, calle_norte, calle_sur, calle_este, calle_oeste FROM domicilios_personas order by id_domicilio asc
 					LIMIT $desde,$por_pagina
 					");
 						mysqli_close($conection);
@@ -60,19 +62,24 @@ include "conexion.php";
 						while ($data= mysqli_fetch_array($query)){
 					?>	
                     <tr>
-                    	<td><?php echo $data['id_predio']; ?></td>
-                        <td><?php echo $data['clave']; ?></td>
-                        <td><?php echo $data['manzana']; ?></td>
-                        <td><?php echo $data['lote']; ?></td>
-                        <td><?php echo $data['superficie']; ?></td>
-                        <td><?php echo $data['propietario']; ?></td>
+                    	<td><?php echo $data['id_domicilio']; ?></td>
                         <td><?php echo $data['calle1']; ?></td>
-                        <td><?php echo $data['numero1']; ?></td>
-                        <td><?php echo $data['nombre']; ?></td>
+                        <td><?php echo $data['numero_exterior']; ?></td>
+                        <td><?php echo $data['numero_interior']; ?></td>
+                        <td><?php echo $data['tipo']; ?></td>
+                        <td><?php echo $data['codigo_postal']; ?></td>
+                        <td><?php echo $data['ciudad']; ?></td>
+                        <td><?php echo $data['estado']; ?></td>
+                        <td><?php echo $data['predio_superficie']; ?></td>
+                        <td><?php echo $data['clave_catastral']; ?></td>
+                        <td><?php echo $data['calle_norte']; ?></td>
+                        <td><?php echo $data['calle_sur']; ?></td>
+                        <td><?php echo $data['calle_este']; ?></td>
+                        <td><?php echo $data['calle_oeste']; ?></td>
                         <td>
-                        	<a class="link_edit" href="editar_predio.php?id=<?php echo $data['id_predio']; ?>">Editar</a>
+                        	<a class="link_edit" href="editar_domicilio.php?id=<?php echo $data['id_domicilio']; ?>">Editar</a>
                             |
-                            <a class="link_delete" href="eliminar_confirmar_predio.php?id=<?php echo $data['id_predio']; ?>">Eliminar</a>
+                            <a class="link_delete" href="eliminar_confirmar_domicilio.php?id=<?php echo $data['id_domicilio']; ?>">Eliminar</a>
  
                         </td>
                     </tr> 

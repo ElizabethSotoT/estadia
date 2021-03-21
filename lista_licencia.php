@@ -6,7 +6,7 @@ include "conexion.php";
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Lista de Predios</title>
+	<title>Lista de Licencia de Anuncios</title>
 	<?php include "includes/scripts.php"; ?>
 </head>
 <body>
@@ -14,11 +14,10 @@ include "conexion.php";
 	<section class="main">
 <?php include "includes/wrapp.php"; ?>
 
- 
 			<div class="articulo">
-				<H1><i class="far fa-map"></i> Lista de Predios</H1>
-                <a href="registro_predio.php" class="btn_new">Crear predio</a>
-                <form action="buscar_predio.php" method="get" class="form_search">
+				<H1><i class="far fa-map"></i> Lista de licencias</H1>
+                <a href="registro_licencia.php" class="btn_new">Crear licencia</a>
+                <form action="buscar_licencia.php" method="get" class="form_search">
                 	<input type="text" name="busqueda" id="busqueda" placeholder="buscar">
                     <input type="submit" value="buscar" class="btn_search">
                 </form>
@@ -26,20 +25,23 @@ include "conexion.php";
                 <table>
                 	<tr>
                     	<th>ID</th>
-                        <th>Clave</th>
-                        <th>Manzana</th>
-                        <th>Lote</th>
-                        <th>Superficie</th>
-                        <th>Propietario</th>
-                        <th>Calle</th>
-                        <th>Número</th>
-                        <th>Colonia</th>
+                    	<th>Nombre del responsable</th>
+                    	<th>RFC</th>
+                        <th>Ubicacion</th>
+                        <th>Tipo</th>
+                        <th>Dimensiones</th>
+                        <th>Cuota anual</th>
+                        <th>Forma de pago</th>
+                        <th>Fecha de pago</th>
+                        <th>Fecha inicio</th>
+                        <th>Fecha final</th>
+                        <th>Acciones</th>
                     </tr>
                     <?php
 					//paginador
-					$sql_registe=mysqli_query($conection,"select count(*) as total_registro from predios where estatus=1");
+					$sql_registe=mysqli_query($conection,"select count(*) as total_licencia from licencia_anuncios");
 					$result_register=mysqli_fetch_array($sql_registe);
-					$total_registro=$result_register['total_registro'];
+					$total_registro=$result_register['total_licencia'];
 					$por_pagina=5;
 					if(empty($_GET['pagina'])){
 						$pagina=1;
@@ -48,31 +50,29 @@ include "conexion.php";
 					}
 					$desde=($pagina-1)*$por_pagina;
 					$total_paginas= ceil($total_registro/$por_pagina);
-					$query= mysqli_query($conection,"select p.id_predio, p.clave, p.manzana,p.lote, p.superficie, p.propietario, p.calle1, 
-															p.numero1, a.nombre 
-													 from predios p inner join asentamientos a on p.id_colonia= a.id_asent 
-													 WHERE estatus=1 order by id_predio asc
-					LIMIT $desde,$por_pagina
-					");
-						mysqli_close($conection);
+					$query= mysqli_query($conection,"SELECT l.id_licencia, p.nombre_responsable, p.rfc, a.ubicacion, a.medida1, a.medida2, a.tipo_anuncio, l.cuota_anual, l.forma_pago, l.fecha_pago, l.fecha_inicio, l.fecha_final from anuncios a inner join licencia_anuncios l on a.id_anuncio = l.id_anuncio inner join personas p on l.id_persona = p.id_persona order by id_licencia asc LIMIT $desde,$por_pagina");
+
+					mysqli_close($conection);
 					$result=mysqli_num_rows($query);
 					if($result>0){
 						while ($data= mysqli_fetch_array($query)){
 					?>	
                     <tr>
-                    	<td><?php echo $data['id_predio']; ?></td>
-                        <td><?php echo $data['clave']; ?></td>
-                        <td><?php echo $data['manzana']; ?></td>
-                        <td><?php echo $data['lote']; ?></td>
-                        <td><?php echo $data['superficie']; ?></td>
-                        <td><?php echo $data['propietario']; ?></td>
-                        <td><?php echo $data['calle1']; ?></td>
-                        <td><?php echo $data['numero1']; ?></td>
-                        <td><?php echo $data['nombre']; ?></td>
+                    	<td><?php echo $data['id_licencia']; ?></td>
+                    	<td><?php echo $data['nombre_responsable']; ?></td>
+                    	<td><?php echo $data['rfc']; ?></td>
+               			<td><?php echo $data['ubicacion']; ?></td>
+                        <td><?php echo $data['medida1']; ?></td>
+                        <td><?php echo $data['medida2']; ?></td>
+                        <td><?php echo $data['cuota_anual']; ?></td>
+                        <td><?php echo $data['forma_pago']; ?></td>
+                        <td><?php echo $data['fecha_pago']; ?></td>
+                        <td><?php echo $data['fecha_inicio']; ?></td>
+                        <td><?php echo $data['fecha_final']; ?></td>
                         <td>
-                        	<a class="link_edit" href="editar_predio.php?id=<?php echo $data['id_predio']; ?>">Editar</a>
+                        	<a class="link_edit" href="editar_licencia.php?id=<?php echo $data['id_licencia']; ?>">Editar</a>
                             |
-                            <a class="link_delete" href="eliminar_confirmar_predio.php?id=<?php echo $data['id_predio']; ?>">Eliminar</a>
+                            <a class="link_delete" href="eliminar_confirmar_licencia.php?id=<?php echo $data['id_licencia']; ?>">Eliminar</a>
  
                         </td>
                     </tr> 
@@ -87,9 +87,7 @@ include "conexion.php";
                 <div class="paginador">
                 	<ul>
                     <?php
-						if($pagina!=1){
-							
-						
+						if($pagina!=1){	
 					?>
                     
                     	<li><p><a href="?pagina=<?php echo 1; ?>"><i class="fas fa-step-backward"></i></a></p></li>

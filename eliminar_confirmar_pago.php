@@ -4,19 +4,19 @@ session_start();
 	include "conexion.php";
 	if(!empty($_POST))
 	{
-		if($_POST['idpredio']==1){
-			header("location: lista_predio.php");
+		if($_POST['idpago']==1){
+			header("location: lista_pago.php");
 			mysqli_close($conection);
 			exit;
 		}	
-		$idpredio=$_POST['idpredio'];
+		$idpago=$_POST['idpago'];
 		//$query_delete=mysqli_query($conection,"delete from usuarios where id_usuario=$idusuario");
 		
-		$query_delete=mysqli_query($conection,"UPDATE predios SET estatus = 0 where id_predio=$idpredio");
+		$query_delete=mysqli_query($conection,"DELETE ordenes_pago where id_pago=$idpago");
 			mysqli_close($conection);
 		if($query_delete)
 		{
-			header("location: lista_predio.php");
+			header("location: lista_pago.php");
 		}else{
 			echo "Error al eliminar";
 		}
@@ -24,24 +24,22 @@ session_start();
 
 	if(empty($_REQUEST['id']))
 	{
-		header("location: lista_predio.php");
+		header("location: lista_pago.php");
 		mysqli_close($conection);
 	}else{
 
-		$idpredio=$_REQUEST['id'];
-		$query= mysqli_query($conection,"select clave, manzana, lote, propietario from 
-											predios where id_predio=$idpredio");
+		$idpago=$_REQUEST['id'];
+		$query= mysqli_query($conection,"SELECT id_pago, concepto, importe, fecha from ordenes_pago WHERE id_pago=$idpago");
 		mysqli_close($conection);
 		$result= mysqli_num_rows($query);
 		if($result>0){
 			while ($data=mysqli_fetch_array($query)){
-				$clave=$data['clave'];
-				$manzana=$data['manzana'];
-				$lote=$data['lote'];
-				$propietario=$data['propietario'];
+				$id_pago=$data['id_pago'];
+				$importe=$data['importe'];
+				$fecha=$data['fecha'];				
 				}
 		}else{
-			header("location: lista_predio.php");
+			header("location: lista_pago.php");
 		}
 	}
 	
@@ -52,7 +50,7 @@ session_start();
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Eliminar predio</title>
+	<title>Eliminar pago</title>
 	<?php include "includes/scripts.php"; ?>
 </head>
 <body>
@@ -63,14 +61,13 @@ session_start();
  
 			<div class="articulo">
             	<div class="data_delete">
-                    <h2>¿Está seguro de eliminar el siguiente predio?</h2>
-                    <p>Clave:<span><?php echo $clave; ?></span></p>
-                    <p>Manzana:<span><?php echo $manzana; ?></span></p>
-                    <p>Lote:<span><?php echo $lote; ?></span></p>
-                    <p>Propietario:<span><?php echo $propietario; ?></span></p>
+                    <h2>¿Está seguro de eliminar el siguiente pago?</h2>
+                    <p>ID:<span><?php echo $id_pago; ?></span></p>
+                    <p>Importe:<span><?php echo $importe; ?></span></p>
+                    <p>Fecha:<span><?php echo $fecha; ?></span></p>                   
                 	<form method="post" action="">
-                    	<input type="hidden" name="idpredio" value="<?php echo $idpredio; ?>">
-                    	<a href="lista_predio.php" class="btn_cancel">Cancelar</a>
+                    	<input type="hidden" name="idpago" value="<?php echo $idpago; ?>">
+                    	<a href="lista_pago.php" class="btn_cancel">Cancelar</a>
                         <input type="submit" value="Aceptar" class="btn_ok">
                     </form>
                 </div>
