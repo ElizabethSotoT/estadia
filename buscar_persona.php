@@ -6,7 +6,7 @@ include "conexion.php";
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Lista de requerimientos</title>
+	<title>Lista de Personas Física/Moral</title>
 	<?php include "includes/scripts.php"; ?>
 </head>
 <body>
@@ -14,27 +14,39 @@ include "conexion.php";
 	<section class="main">
 <?php include "includes/wrapp.php"; ?>
 
+ 
 			<div class="articulo">
-				<H1><i class="far fa-map"></i> Requerimientos</H1>
-                <a href="registro_requerimiento.php" class="btn_new">Crear requerimiento</a>
-                <form action="buscar_requerimiento.php" method="get" class="form_search">
+				<?php 
+					$busqueda= strtolower($_REQUEST['busqueda']);
+					
+					if(empty($busqueda)){
+						header ("location: lista_persona.php");
+						mysqli_close($conection);
+					}
+				?>
+				<H1><i class="fa fa-address-card" ></i> Personas</H1>
+                <a href="registro_persona.php" class="btn_new">Crear persona</a>
+                <form action="buscar_persona.php" method="get" class="form_search">
                 	<input type="text" name="busqueda" id="busqueda" placeholder="buscar">
                     <input type="submit" value="buscar" class="btn_search">
+                    <a href="lista_persona.php"><img src="img/cerrar.png" class="btn_delete" style="margin-top:7px; margin-left:10px"></a>
                 </form>
                 <div  style="overflow: auto" width="50%">
                 <table>
                 	<tr>
                     	<th>ID</th>
-                    	<th>Nombre responsable</th>
-						<th>Nombre comercial</th>
-                        <th>Fecha</th>
-                        <th>Descripcion</th>
-						<th>PDF</th>  
-                        <th>Acciones</th>   
+                        <th>Nombre responsable</th>
+                        <th>Nombre comercial</th>
+                        <th>RFC</th>
+                        <th>Tipo</th>
+						<th>Calle</th>
+						<th>Número</th>
+						<th>Colonia</th>
+                        <th>Opciones</th>
                     </tr>
                     <?php
 					//paginador
-					$sql_registe=mysqli_query($conection,"select count(*) as total_registro from requerimientos_anuncios");
+					$sql_registe=mysqli_query($conection,"select count(*) as total_registro from personas");
 					$result_register=mysqli_fetch_array($sql_registe);
 					$total_registro=$result_register['total_registro'];
 					$por_pagina=5;
@@ -45,27 +57,36 @@ include "conexion.php";
 					}
 					$desde=($pagina-1)*$por_pagina;
 					$total_paginas= ceil($total_registro/$por_pagina);
-					$query= mysqli_query($conection,"SELECT r.id_requerimiento, p.nombre_responsable, p.nombre_comercial, r.fecha, r.descripcion FROM requerimientos_anuncios r INNER JOIN personas p ON p.id_persona = r.id_persona order by id_requerimiento asc
-					LIMIT $desde,$por_pagina
-					");
+					$query= mysqli_query($conection,"SELECT p.id_persona, p.nombre_responsable, p.nombre_comercial, p.rfc, p.tipo, p.calle, p.numero, a.nombre FROM personas p inner join asentamientos a on p.id_colonia=a.id_asent WHERE(
+							P.id_persona like '%$busqueda%' or 
+							p.nombre_responsable like '%$busqueda%' or 
+							p.nombre_comercial like '%$busqueda%' or 
+							p.rfc like '%$busqueda%' or 
+							p.tipo like '%$busqueda%' or  
+							p.calle like '%$busqueda%' or  
+							p.numero like '%$busqueda%' or  
+							a.nombre like '%$busqueda%' 
+							)
+
+						order by id_persona asc LIMIT $desde,$por_pagina");
 						mysqli_close($conection);
 					$result=mysqli_num_rows($query);
 					if($result>0){
 						while ($data= mysqli_fetch_array($query)){
 					?>	
                     <tr>
-                    	<td><?php echo $data['id_requerimiento']; ?></td>
+                    	<td><?php echo $data['id_persona']; ?></td>
                         <td><?php echo $data['nombre_responsable']; ?></td>
-						<td><?php echo $data['nombre_comercial']; ?></td>
-                        <td><?php echo $data['fecha']; ?></td>
-                        <td><?php echo $data['descripcion']; ?></td>
-						<td>
-						<a class="link_edit" href="pdf_requerimiento.php?id=<?php echo $data['id_requerimiento']; ?>&nombre_responsable=<?php echo $data['nombre_responsable']; ?>&nombre_comercial=<?php echo $data['nombre_comercial']; ?>&fecha=<?php echo $data['fecha']; ?>&descripcion=<?php echo $data['descripcion']; ?>">PDF</a>
-						</td>
+                        <td><?php echo $data['nombre_comercial']; ?></td>
+                        <td><?php echo $data['rfc']; ?></td>
+                        <td><?php echo $data['tipo']; ?></td>
+						<td><?php echo $data['calle']; ?></td>
+						<td><?php echo $data['numero']; ?></td>
+						<td><?php echo $data['nombre']; ?></td>
                         <td>
-                        	<a class="link_edit" href="editar_requerimiento.php?id=<?php echo $data['id_requerimiento']; ?>">Editar</a>
+                        	<a class="link_edit" href="editar_persona.php?id=<?php echo $data['id_persona']; ?>">Editar</a>
                             |
-                            <a class="link_delete" href="eliminar_confirmar_requerimiento.php?id=<?php echo $data['id_requerimiento']; ?>">Eliminar</a>
+                            <a class="link_delete" href="eliminar_confirmar_persona.php?id=<?php echo $data['id_persona']; ?>">Eliminar</a>
  
                         </td>
                     </tr> 

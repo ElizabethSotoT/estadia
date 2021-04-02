@@ -60,9 +60,9 @@ session_start();
 			<div class="articulo">
             	<div class="data_delete">
                     <h2>¿Está seguro de eliminar el siguiente requerimiento?</h2>
-                    <p>ID:<span><?php echo $id_requerimiento; ?></span></p>
-                    <p>Persona:<span><?php echo $id_persona; ?></span></p>
-                    <p>Fecha:<span><?php echo $fecha; ?></span></p>                    
+                    <p><strong>ID:</strong><span><?php echo $id_requerimiento; ?></span></p>
+                    <p><strong>Persona:</strong><span><?php echo $id_persona; ?></span></p>
+                    <p><strong>Fecha:</strong><span><?php echo $fecha; ?></span></p>                    
                 	<form method="post" action="">
                     	<input type="hidden" name="id_requerimiento" value="<?php echo $id_requerimiento; ?>">
                     	<a href="lista_requerimiento.php" class="btn_cancel">Cancelar</a>

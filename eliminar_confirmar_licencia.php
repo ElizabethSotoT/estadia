@@ -29,13 +29,16 @@ session_start();
 	}else{
 
 		$id_licencia=$_REQUEST['id'];
-		$query= mysqli_query($conection,"select id_licencia, fecha_inicio, fecha_final from 
-											licencia_anuncios where id_licencia=$id_licencia");
+		$query= mysqli_query($conection,"SELECT l.id_licencia, p.nombre_responsable, p.nombre_comercial ,p.rfc, l.fecha_pago, l.fecha_inicio, l.fecha_final from personas p inner join licencia_anuncios l on p.id_persona = l.id_persona where l.id_licencia=$id_licencia");
+										
 		mysqli_close($conection);
 		$result= mysqli_num_rows($query);
 		if($result>0){
 			while ($data=mysqli_fetch_array($query)){
 				$id_licencia=$data['id_licencia'];
+				$nombre_responsable=$data['nombre_responsable'];
+				$nombre_comercial=$data['nombre_comercial'];
+				$rfc=$data['rfc'];
 				$fecha_inicio=$data['fecha_inicio'];
 				$fecha_final=$data['fecha_final'];				
 				}
@@ -63,9 +66,12 @@ session_start();
 			<div class="articulo">
             	<div class="data_delete">
                     <h2>¿Está seguro de eliminar la siguiente licencia?</h2>
-                    <p>ID:<span><?php echo $id_licencia; ?></span></p>
-                    <p>Fecha inicio:<span><?php echo $fecha_inicio; ?></span></p>
-                    <p>Fecha final:<span><?php echo $fecha_final; ?></span></p>
+                    <p><strong>ID:</strong><span><?php echo $id_licencia; ?></span></p>
+					<p><strong>Nombre del responsable:</strong><span><?php echo $nombre_responsable; ?></span></p>
+					<p><strong>Nombre comercial:</strong><span><?php echo $nombre_comercial; ?></span></p>
+					<p><strong>ID:</strong><span><?php echo $id_licencia; ?></span></p>
+                    <p><strong>Fecha inicio:</strong><span><?php echo $fecha_inicio; ?></span></p>
+                    <p><strong>Fecha final:</strong><span><?php echo $fecha_final; ?></span></p>
                    
                 	<form method="post" action="">
                     	<input type="hidden" name="id_licencia" value="<?php echo $id_licencia; ?>">

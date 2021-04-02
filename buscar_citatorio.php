@@ -14,13 +14,21 @@ include "conexion.php";
 	<section class="main">
 <?php include "includes/wrapp.php"; ?>
 
- 
 			<div class="articulo">
+				<?php 
+					$busqueda= strtolower($_REQUEST['busqueda']);
+					
+					if(empty($busqueda)){
+						header ("location:lista_citatorio.php");
+						mysqli_close($conection);
+					}
+				?>
 				<H1><i class="far fa-map"></i> Citatorios</H1>
                 <a href="registro_citatorio.php" class="btn_new">Crear citatorio</a>
                 <form action="buscar_citatorio.php" method="get" class="form_search">
                 	<input type="text" name="busqueda" id="busqueda" placeholder="buscar">
                     <input type="submit" value="buscar" class="btn_search">
+                    <a href="lista_citatorio.php"><img src="img/cerrar.png" class="btn_delete" style="margin-top:7px; margin-left:10px"></a>
                 </form>
                 <div  style="overflow: auto" width="50%">
                 <table>
@@ -51,7 +59,17 @@ include "conexion.php";
 					}
 					$desde=($pagina-1)*$por_pagina;
 					$total_paginas= ceil($total_registro/$por_pagina);
-					$query= mysqli_query($conection,"SELECT c.id_citatorio, c.razon, c.fecha_creado, c.fecha_citatorio, c.id_persona, p.nombre_responsable, p.nombre_comercial, c.id_requerimiento, r.id_requerimiento, r.fecha as fecha_requerimiento, r.descripcion FROM personas p INNER JOIN citatorios_anuncios c on p.id_persona=c.id_persona INNER JOIN requerimientos_anuncios r on r.id_requerimiento=c.id_requerimiento order by id_citatorio asc	LIMIT $desde,$por_pagina");
+					$query= mysqli_query($conection,"SELECT c.id_citatorio, c.razon, c.fecha_creado, c.fecha_citatorio, c.id_persona, p.nombre_responsable, p.nombre_comercial, c.id_requerimiento, r.fecha as fecha_requerimiento, r.descripcion FROM personas p INNER JOIN citatorios_anuncios c on p.id_persona=c.id_persona INNER JOIN requerimientos_anuncios r on r.id_requerimiento = c.id_requerimiento where
+																													c.id_citatorio like '%$busqueda%' or 
+																													c.razon like '%$busqueda%' or 
+																													c.fecha_creado like '%$busqueda%' or 
+																													c.fecha_citatorio like '%$busqueda%' or 
+																													p.nombre_responsable like '%$busqueda%' or 
+																													p.nombre_comercial like '%$busqueda%' or 
+																													c.id_requerimiento like '%$busqueda%' or 
+																													r.fecha like '%$busqueda%' or 
+																													r.descripcion like '%$busqueda%' 
+																													 order by id_citatorio asc	LIMIT $desde,$por_pagina");
 						mysqli_close($conection);
 					$result=mysqli_num_rows($query);
 					if($result>0){

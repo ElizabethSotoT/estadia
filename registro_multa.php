@@ -32,7 +32,7 @@ session_start();
                                         echo "_Fecha:$fecha _Id_requerimiento:$id_requerimiento";
 					}	
 			}
-			
+			header('location:lista_multa.php');
 			mysqli_close($conection);	
 		}	
 	}
@@ -56,9 +56,27 @@ session_start();
     <hr>
     <div class="alert"><?php echo isset($alert) ? $alert:''; ?></div>
     <form action="" method="post">
-        <label for="id_requerimiento">Requerimiento</label>
-        <input type="text" name="id_requerimiento" id="id_requerimiento" placeholder="Requerimiento">         
+                 
+		<label for="id_requerimiento">Requerimiento</label>
+        <?php include "conexion.php";
+		$query_requerimiento= mysqli_query($conection, "select * from requerimientos_anuncios order by id_requerimiento asc");
+			mysqli_close($conection);
+		$result_requerimiento= mysqli_num_rows($query_requerimiento);
 
+		?>
+        <select name="id_requerimiento" id="id_requerimiento"> 
+			<?php
+                if ($result_requerimiento > 0)
+                {
+            
+                   while($id_requerimiento= mysqli_fetch_array($query_requerimiento)) {
+			?>
+            <option value="<?php echo $id_requerimiento['id_requerimiento']; ?>"><?php echo $id_requerimiento['id_requerimiento'], " ", $id_requerimiento['descripcion']?></option>
+            <?php
+					}
+                }
+            
+        ?>
         
         <input type="submit" value="Crear multa" class="btn_save">
         </select>         

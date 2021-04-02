@@ -6,7 +6,7 @@ include "conexion.php";
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Lista de requerimientos</title>
+	<title>Lista de multas</title>
 	<?php include "includes/scripts.php"; ?>
 </head>
 <body>
@@ -14,27 +14,37 @@ include "conexion.php";
 	<section class="main">
 <?php include "includes/wrapp.php"; ?>
 
+ 
 			<div class="articulo">
-				<H1><i class="far fa-map"></i> Requerimientos</H1>
-                <a href="registro_requerimiento.php" class="btn_new">Crear requerimiento</a>
-                <form action="buscar_requerimiento.php" method="get" class="form_search">
+				<?php 
+					$busqueda= strtolower($_REQUEST['busqueda']);
+					
+					if(empty($busqueda)){
+						header ("location: lista_multa.php");
+						mysqli_close($conection);
+					}
+				?>
+				<H1><i class="far fa-map"></i> Multas</H1>
+                <a href="registro_multa.php" class="btn_new">Crear multa</a>
+                <form action="buscar_multa.php" method="get" class="form_search">
                 	<input type="text" name="busqueda" id="busqueda" placeholder="buscar">
                     <input type="submit" value="buscar" class="btn_search">
+                    <a href="lista_multa.php"><img src="img/cerrar.png" class="btn_delete" style="margin-top:7px; margin-left:10px"></a>
                 </form>
                 <div  style="overflow: auto" width="50%">
                 <table>
                 	<tr>
                     	<th>ID</th>
-                    	<th>Nombre responsable</th>
-						<th>Nombre comercial</th>
                         <th>Fecha</th>
-                        <th>Descripcion</th>
-						<th>PDF</th>  
-                        <th>Acciones</th>   
+						<th>ID de requerimiento</th>
+                        <th>Descripcion de requerimiento</th>
+                        <th>Fecha de requerimiento</th>
+                        <th>PDF</th>                  
+                        <th>Acciones</th>      
                     </tr>
                     <?php
 					//paginador
-					$sql_registe=mysqli_query($conection,"select count(*) as total_registro from requerimientos_anuncios");
+					$sql_registe=mysqli_query($conection,"select count(*) as total_registro from multas_anuncios");
 					$result_register=mysqli_fetch_array($sql_registe);
 					$total_registro=$result_register['total_registro'];
 					$por_pagina=5;
@@ -45,27 +55,31 @@ include "conexion.php";
 					}
 					$desde=($pagina-1)*$por_pagina;
 					$total_paginas= ceil($total_registro/$por_pagina);
-					$query= mysqli_query($conection,"SELECT r.id_requerimiento, p.nombre_responsable, p.nombre_comercial, r.fecha, r.descripcion FROM requerimientos_anuncios r INNER JOIN personas p ON p.id_persona = r.id_persona order by id_requerimiento asc
-					LIMIT $desde,$por_pagina
-					");
+					$query= mysqli_query($conection,"SELECT m.id_multa, m.fecha, r.id_requerimiento, r.fecha , r.descripcion FROM multas_anuncios m INNER JOIN requerimientos_anuncios r on m.id_requerimiento = r.id_requerimiento where 
+																							m.id_multa like '%$busqueda%' or 
+																							m.fecha like '%$busqueda%' or 
+																							r.id_requerimiento like '%$busqueda%' or 
+																							r.fecha like '%$busqueda%' or 
+																							r.descripcion like '%$busqueda%' 
+																							order by id_multa asc LIMIT $desde,$por_pagina");
 						mysqli_close($conection);
 					$result=mysqli_num_rows($query);
 					if($result>0){
 						while ($data= mysqli_fetch_array($query)){
 					?>	
                     <tr>
-                    	<td><?php echo $data['id_requerimiento']; ?></td>
-                        <td><?php echo $data['nombre_responsable']; ?></td>
-						<td><?php echo $data['nombre_comercial']; ?></td>
+                    	<td><?php echo $data['id_multa']; ?></td>
                         <td><?php echo $data['fecha']; ?></td>
-                        <td><?php echo $data['descripcion']; ?></td>
+                        <td><?php echo $data['id_requerimiento']; ?></td>
+						<td><?php echo $data['descripcion']; ?></td>
+						<td><?php echo $data['fecha']; ?></td>
 						<td>
-						<a class="link_edit" href="pdf_requerimiento.php?id=<?php echo $data['id_requerimiento']; ?>&nombre_responsable=<?php echo $data['nombre_responsable']; ?>&nombre_comercial=<?php echo $data['nombre_comercial']; ?>&fecha=<?php echo $data['fecha']; ?>&descripcion=<?php echo $data['descripcion']; ?>">PDF</a>
+						<a class="link_edit" type=hidden href="pdf_multa.php?id=<?php echo $data['id_multa']; ?>&fecha=<?php echo $data['fecha']; ?>&fecha_requerimiento=<?php echo $data['fecha_requerimiento']; ?>&id_requerimiento=<?php echo $data['id_requerimiento']; ?>&descripcion=<?php echo $data['descripcion']; ?>">PDF</a>
 						</td>
                         <td>
-                        	<a class="link_edit" href="editar_requerimiento.php?id=<?php echo $data['id_requerimiento']; ?>">Editar</a>
+                        	<a class="link_edit" href="editar_multa.php?id=<?php echo $data['id_multa']; ?>">Editar</a>
                             |
-                            <a class="link_delete" href="eliminar_confirmar_requerimiento.php?id=<?php echo $data['id_requerimiento']; ?>">Eliminar</a>
+                            <a class="link_delete" href="eliminar_confirmar_multa.php?id=<?php echo $data['id_multa']; ?>">Eliminar</a>
  
                         </td>
                     </tr> 

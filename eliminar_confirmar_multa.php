@@ -29,7 +29,7 @@ session_start();
 	}else{
 
 		$id_multa=$_REQUEST['id'];
-		$query= mysqli_query($conection,"SELECT id_multa, fecha, id_requerimiento from multas_anuncios where id_multa=$id_multa");
+		$query= mysqli_query($conection,"SELECT m.id_multa, m.fecha, m.id_requerimiento, r.descripcion from multas_anuncios m inner join requerimientos_anuncios r on r.id_requerimiento=m.id_requerimiento where m.id_multa=$id_multa");
 		mysqli_close($conection);
 		$result= mysqli_num_rows($query);
 		if($result>0){
@@ -37,6 +37,7 @@ session_start();
 				$id_multa=$data['id_multa'];
 				$fecha=$data['fecha'];
 				$id_requerimiento=$data['id_requerimiento'];
+				$descripcion=$data['descripcion'];
 				}
 		}else{
 			header("location: lista_multa.php");
@@ -62,9 +63,10 @@ session_start();
 			<div class="articulo">
             	<div class="data_delete">
                     <h2>¿Está seguro de eliminar la siguiente multa?</h2>
-                    <p>ID:<span><?php echo $id_multa; ?></span></p>
-                    <p>Fecha:<span><?php echo $fecha; ?></span></p>
-                    <p>Requerimiento:<span><?php echo $id_requerimiento; ?></span></p>
+                    <p><strong>ID:</strong><span><?php echo $id_multa; ?></span></p>
+                    <p><strong>Fecha:</strong><span><?php echo $fecha; ?></span></p>
+                    <p><strong>Requerimiento:</strong><span><?php echo $id_requerimiento; ?></span></p>
+					<p><strong>Descripcion:</strong><span><?php echo $descripcion; ?></span></p>
                 	<form method="post" action="">
                     	<input type="hidden" name="id_multa" value="<?php echo $id_multa; ?>">
                     	<a href="lista_multa.php" class="btn_cancel">Cancelar</a>

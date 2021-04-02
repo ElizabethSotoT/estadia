@@ -57,53 +57,53 @@ session_start();
     <hr>
     <div class="alert"><?php echo isset($alert) ? $alert:''; ?></div>
     <form action="" method="post">
-    	<label for="id_persona">Nombre del responsable</label>
+    	<label for="id_persona">Nombre del responsable/comercial*</label>
         <?php include "conexion.php";
 		$query_persona= mysqli_query($conection, "select * from personas order by id_persona asc");
 			mysqli_close($conection);
 		$result_persona= mysqli_num_rows($query_persona);
 
 		?>
-        <select name="id_persona" id="id_persona"> 
+        <select name="id_persona" id="id_persona">
+        	<option value="0">Seleccione una opción</option> 
 			<?php
                 if ($result_persona > 0)
                 {
             
                    while($id_persona= mysqli_fetch_array($query_persona)) {
 			?>
-            <option value="<?php echo $id_persona['id_persona']; ?>"><?php echo $id_persona['nombre_responsable'] ?></option>
+            <option value="<?php echo $id_persona['id_persona']; ?>"><?php echo $id_persona['nombre_responsable'], " - ", $id_persona['nombre_comercial']?></option>
+
+            
+          	  
             <?php
 					}
                 }
             
         ?>
-        <p>Esto es para que se muestren correctamente los list</p>
-    	<input type="hidden" placeholder="Forma de pago">
-        <input type="hidden" placeholder="Forma de pago">
-        <input type="hidden" placeholder="Forma de pago">
-        <label for="id_anuncio">Ubicación de anuncio</label>
+        </select>	
+        <label for="id_anuncio">Folio/Ubicación de anuncio¨*</label>
         <?php include "conexion.php";
 		$query_anuncio= mysqli_query($conection, "select * from anuncios order by id_anuncio asc");
 			mysqli_close($conection);
 		$result_anuncio= mysqli_num_rows($query_anuncio);
 		?>
-        <select name="id_anuncio" id="id_anuncio"> 
+        <select name="id_anuncio" id="id_anuncio">
+        	<option value="0">Seleccione un anuncio</option> 
 			<?php
                 if ($result_anuncio > 0)
                 {
                    while($id_anuncio= mysqli_fetch_array($query_anuncio)) {
 			?>
-            <option value="<?php echo $id_anuncio['id_anuncio']; ?>"><?php echo $id_anuncio['ubicacion'] ?></option>
+            <option value="<?php echo $id_anuncio['id_anuncio']; ?>"><?php echo $id_anuncio['id_anuncio'], " - ", $id_anuncio['ubicacion'] ?></option>
             <?php
 					}
                 }
             
-        ?>   
-        <input type="hidden" placeholder="Forma de pago">
-        <input type="hidden" placeholder="Forma de pago">
-        <input type="hidden" placeholder="Forma de pago">
+        ?>  
+        </select>  
         <label for="cuota_anual">Cuota anual</label>
-        <input type="text" name="cuota anual" id="cuota_anual" placeholder="Cuota anual">
+        <input step="any" type="number" min="1" name="cuota anual" id="cuota_anual" placeholder="Cuota anual">
         <label for="forma_pago">Forma pago</label>
         <input type="text" name="forma_pago" id="forma_pago" placeholder="Forma pago"> 
         <label for="fecha_pago">Fecha pago de licencia</label>

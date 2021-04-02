@@ -16,7 +16,7 @@ include "conexion.php";
 
  
 			<div class="articulo">
-				<H1><i class="fa fa-map-marker" aria-hidden="true"></i> Lista de Anuncios</H1>
+				<H1><i class="fa fa-map-marker" aria-hidden="true"></i> Anuncios</H1>
                 <a href="registro_anuncio.php" class="btn_new">Registrar anuncio</a>
                 <form action="buscar_anuncio.php" method="get" class="form_search">
                 	<input type="text" name="busqueda" id="busqueda" placeholder="buscar">
@@ -49,8 +49,7 @@ include "conexion.php";
 					}
 					$desde=($pagina-1)*$por_pagina;
 					$total_paginas= ceil($total_registro/$por_pagina);
-					$query= mysqli_query($conection,"SELECT id_anuncio, clave_catastral, ubicacion, zona, tipo_anuncio, medida1, medida2, 								salarios_minimo, cantidad FROM anuncios 
-													 order by id_anuncio asc	LIMIT $desde,$por_pagina");
+					$query= mysqli_query($conection,"SELECT id_anuncio, clave_catastral, ubicacion, zona, tipo_anuncio, medida1, medida2, salarios_minimo, cantidad FROM anuncios order by id_anuncio asc LIMIT $desde,$por_pagina");
 
 
 						mysqli_close($conection);
@@ -72,7 +71,6 @@ include "conexion.php";
                         	<a class="link_edit" href="editar_anuncio.php?id=<?php echo $data['id_anuncio']; ?>">Editar</a>
                             |
                             <a class="link_delete" href="eliminar_confirmar_anuncio.php?id=<?php echo $data['id_anuncio']; ?>">Eliminar</a>
- 
                         </td>
                     </tr> 
                     <?php

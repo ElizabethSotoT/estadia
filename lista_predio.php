@@ -21,6 +21,7 @@ include "conexion.php";
                 <form action="buscar_predio.php" method="get" class="form_search">
                 	<input type="text" name="busqueda" id="busqueda" placeholder="buscar">
                     <input type="submit" value="buscar" class="btn_search">
+                    
                 </form>
                 <div  style="overflow: auto" width="50%">
                 <table>

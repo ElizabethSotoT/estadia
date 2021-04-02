@@ -5,11 +5,11 @@ session_start();
 	if(!empty($_POST))
 	{
 		$alert='';
-		if(empty($_POST['razon']) || empty($_POST['fecha_creado']) || empty($_POST['fecha_citatorio']) || empty($_POST['id_persona']) || empty($_POST['id_requerimiento']))
+		if(empty($_POST['id_citatorio']) || empty($_POST['razon']) || empty($_POST['fecha_creado']) || empty($_POST['id_persona']) || empty($_POST['id_requerimiento']))
 		{
 			$alert='<p class="msg_error">Todos los campos son obligatorios</p>';
 		} else{
-
+			echo $id_citatorio || $razon || $fecha_creado || $fecha_citatorio || $id_persona || $id_citatorio;
 			$id_citatorio= $_POST['id_citatorio'];
 			$razon= $_POST['razon'];
 			$fecha_creado= $_POST['fecha_creado'];	
@@ -17,7 +17,7 @@ session_start();
 			$id_persona= $_POST['id_persona'];
 			$id_requerimiento= $_POST['id_requerimiento'];
 			
-			$query1= mysqli_query($conection, "select * from citatorios_anuncios where id_citatorio = '$id_citatorio'");
+			$query1= mysqli_query($conection, "select id_citatorio, razon, fecha_creado, id_persona, id_requerimiento from citatorios_anuncios where id_citatorio = '$id_citatorio'");
 
 			$result1= mysqli_num_rows($query1);
 
@@ -25,12 +25,10 @@ session_start();
 				$alert='<p class="msg_error">El citatorio ya existe</p>';	
 			}else{
 					if(empty($_POST['id_citatorio'])){
-						$sql_update= mysqli_query($conection,"UPDATE citatorios_anuncios
-															set razon='$razon', fecha_creado='$fecha_creado', fecha_citatorio='$fecha_citatorio', id_persona='$id_persona', id_requerimiento='$id_requerimiento' where id_citatorio='$id_citatorio'");
+						$sql_update= mysqli_query($conection,"UPDATE citatorios_anuncios SET razon='$razon', fecha_creado='$fecha_creado', id_persona='$id_persona', id_requerimiento='$id_requerimiento' WHERE id_citatorio='$id_citatorio'");
 					
 					}else{
-						$sql_update= mysqli_query($conection,"UPDATE citatorios_anuncios
-															set razon='$razon', fecha_creado='$fecha_creado', fecha_citatorio='$fecha_citatorio', id_persona='$id_persona', id_requerimiento='$id_requerimiento' where id_citatorio='$id_citatorio'");
+						$sql_update= mysqli_query($conection,"UPDATE citatorios_anuncios SET razon='$razon', fecha_creado='$fecha_creado', id_persona='$id_persona', id_requerimiento='$id_requerimiento' WHERE id_citatorio='$id_citatorio'");
 					}
 
 				if($sql_update){
@@ -49,7 +47,7 @@ session_start();
 			mysqli_close($conection);
 	}
 		$id_citatorio= $_GET['id'];
-		$query= mysqli_query($conection,"SELECT id_citatorio, razon, fecha_creado, fecha_citatorio, id_persona, id_requerimiento  from citatorios_anuncios WHERE id_citatorio=$id_citatorio");
+		$query= mysqli_query($conection,"SELECT c.id_citatorio, c.razon, c.fecha_creado, c.id_persona, p.nombre_responsable, p.nombre_comercial, c.id_requerimiento, r.id_requerimiento, r.descripcion FROM personas p INNER JOIN citatorios_anuncios c on p.id_persona=c.id_persona INNER JOIN requerimientos_anuncios r on r.id_requerimiento=c.id_requerimiento WHERE id_citatorio=$id_citatorio");
 			mysqli_close($conection);
 		$result_sql=mysqli_num_rows($query);
 		if($result_sql==0){
@@ -59,9 +57,11 @@ session_start();
 				$id_citatorio= $data['id_citatorio'];
 				$razon= $data['razon'];
 				$fecha_creado= $data['fecha_creado'];	
-				$fecha_citatorio= $data['fecha_citatorio'];
 				$id_persona= $data['id_persona'];
+				$nombre_responsable= $data['nombre_responsable'];
+				$nombre_comercial= $data['nombre_comercial'];
 				$id_requerimiento= $data['id_requerimiento'];
+				$descripcion= $data['descripcion'];
 				
 			}	
 		}
@@ -92,14 +92,54 @@ session_start();
         <input type="text" name="razon" id="razon" placeholder="Razon de citatorio" value="<?php echo $razon; ?>">
         <label for="fecha_creado">Fecha</label>
         <input type="date" name="fecha_creado" id="fecha_creado" placeholder="Fecha de proceso" value="<?php echo $fecha_creado; ?>">
-        <label for="fecha_citatorio">Fecha de citatorio</label>
-        <input type="date" name="fecha_citatorio" id="fecha_citatorio" placeholder="Fecha de citatorio" value="<?php echo $fecha_citatorio; ?>">
-        <label for="id_persona">Persona</label>
-        <input type="text" name="id_persona" id="id_persona" placeholder="Persona física/moral" value="<?php echo $id_persona; ?>">
+        
+        <label for="id_persona">Nombre del responsable</label>
+        <?php include "conexion.php";
+		$query_persona= mysqli_query($conection, "select * from personas order by id_persona asc");
+			mysqli_close($conection);
+		$result_persona= mysqli_num_rows($query_persona);
+
+		?>
+        <select name="id_persona" id="id_persona"> 
+        	<option value="<?php echo $id_persona; ?>" selected><?php echo "$nombre_responsable - $nombre_comercial"; ?></option>
+			<?php
+                if ($result_persona > 0)
+                {
+            
+                   while($id_persona= mysqli_fetch_array($query_persona)) {
+			?>
+            <option value="<?php echo $id_persona['id_persona']; ?>"><?php echo $id_persona['nombre_responsable'], " - ", $id_persona['nombre_comercial'] ?></option>
+            <?php
+					}
+                }
+            
+        ?>
+    	</select>
         <label for="id_requerimiento">Requerimiento</label>
-        <input type="text" name="id_requerimiento" id="id_requerimiento" placeholder="Requerimiento" value="<?php echo $id_requerimiento; ?>">
+        <?php include "conexion.php";
+        $query_multa= mysqli_query($conection, "select * from requerimientos_anuncios order by id_requerimiento");
+            mysqli_close($conection);
+        $result_multa= mysqli_num_rows($query_multa);
+
+        ?>
+        <select name="id_requerimiento" id="id_requerimiento"> 
+        	<option value="<?php echo $id_requerimiento; ?>" selected><?php echo "$id_requerimiento - $descripcion"; ?></option>
+            <?php
+                if ($result_multa > 0)
+                {
+            
+                   while($id_requerimiento= mysqli_fetch_array($query_multa)) {
+            ?>
+            <option value="<?php echo $id_requerimiento['id_requerimiento']; ?>"><?php echo $id_requerimiento['id_requerimiento'], " - ", $id_requerimiento['descripcion'] ?></option>
+            <?php
+                    } 
+                }
+            
+        ?>
+        
+        </select>
         <input type="submit" value="Actualizar citatorio" class="btn_save">
-        </select>         
+                
     </form>
     
     </div>

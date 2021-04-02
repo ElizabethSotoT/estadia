@@ -65,11 +65,11 @@ session_start();
 			<div class="articulo">
             	<div class="data_delete">
                     <h2>¿Está seguro de eliminar el siguiente domicilio?</h2>
-                    <p>ID:<span><?php echo $id_domicilio; ?></span></p>
-                    <p>Calle:<span><?php echo $calle1; ?></span></p>
-                    <p>No.Exterior:<span><?php echo $numero_exterior; ?></span></p>
-                    <p>Ciudad:<span><?php echo $ciudad; ?></span></p>
-                    <p>Clave catastral:<span><?php echo$clave_catastral; ?></span></p>
+                    <p><strong>ID:</strong><span><?php echo $id_domicilio; ?></span></p>
+                    <p><strong>Calle:</strong><span><?php echo $calle1; ?></span></p>
+                    <p><strong>No.Exterior:</strong><span><?php echo $numero_exterior; ?></span></p>
+                    <p><strong>Ciudad:</strong><span><?php echo $ciudad; ?></span></p>
+                    <p><strong>Clave catastral:</strong><span><?php echo$clave_catastral; ?></span></p>
                 	<form method="post" action="">
                     	<input type="hidden" name="id_domicilio" value="<?php echo $id_domicilio; ?>">
                     	<a href="lista_domicilio.php" class="btn_cancel">Cancelar</a>

@@ -64,10 +64,10 @@ session_start();
 			<div class="articulo">
             	<div class="data_delete">
                     <h2>¿Está seguro de eliminar el siguiente predio?</h2>
-                    <p>Clave:<span><?php echo $clave; ?></span></p>
-                    <p>Manzana:<span><?php echo $manzana; ?></span></p>
-                    <p>Lote:<span><?php echo $lote; ?></span></p>
-                    <p>Propietario:<span><?php echo $propietario; ?></span></p>
+                    <p><strong>Clave:</strong><span><?php echo $clave; ?></span></p>
+                    <p><strong>Manzana:</strong><span><?php echo $manzana; ?></span></p>
+                    <p><strong>Lote:</strong><span><?php echo $lote; ?></span></p>
+                    <p><strong>Propietario:</strong><span><?php echo $propietario; ?></span></p>
                 	<form method="post" action="">
                     	<input type="hidden" name="idpredio" value="<?php echo $idpredio; ?>">
                     	<a href="lista_predio.php" class="btn_cancel">Cancelar</a>

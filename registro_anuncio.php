@@ -64,21 +64,23 @@ session_start();
     <div class="alert"><?php echo isset($alert) ? $alert:''; ?></div>
     <form action="" method="post">
     	<label for="clave_catastral">Clave catastral*</label>
-        <input type="text" name="clave_catastral" id="clave_catastral" placeholder="Clave catastral">
+        <input type="text" style="text-transform:uppercase" name="clave_catastral" id="clave_catastral" placeholder="Clave catastral">
     	<label for="calle1">Calle*</label>
         <input type="text" name="calle1" id="calle1" placeholder="Calle del anuncio">
-        <label for="calle2">Calle 2</label>
-        <input type="text" name="calle2" id="calle2" placeholder="Calle del anuncio">
+        <label for="calle2">Calle</label>
+        <input type="text" name="calle2" id="calle2" placeholder="Segunda referencia de calle del anuncio">
         <label for="manzana">Lote*</label>
         <input type="text" name="manzana" id="manzana" placeholder="No. de manzana">
         <label for="zona">Zona*</label>   
         <select type="text" name="zona" id="zona">
+        	<option value="0">Seleccione una opción</option>
 		    <option>Urbana</option>
 		    <option>Rural</option>	
 		    <option>Otro</option>		     
 		</select>  
         <label for="tipo_anuncio">Tipo*</label>        
         <select type="text" name="tipo_anuncio" id="tipo_anuncio">
+        	<option value="0">Seleccione tipo de anuncio</option>
         	<option>Espectacular</option>
         	<option>Balcón</option>
 		    <option>Luminoso</option>
@@ -88,13 +90,13 @@ session_start();
 		    <option>Otro</option>		     
 		</select> 
         <label for="medida1">Medida*</label>
-        <input type="number" name="medida1" id="medida1" placeholder="Medida No.1">
+        <input step="any" type="number" min="1" name="medida1" id="medida1" placeholder="Medida No.1">
         <label for="medida2">Medida*</label>
-        <input type="number" name="medida2" id="medida2" placeholder="Medida No.2">
+        <input step="any" type="number" min="1" name="medida2" id="medida2" placeholder="Medida No.2">
         <label for="salarios_minimo">Salarios minimos*</label>
-        <input type="number" name="salarios_minimo" id="salarios_minimo" placeholder="Salarios minimos">
+        <input type="number" min="1" name="salarios_minimo" id="salarios_minimo" placeholder="Salarios minimos">
         <label for="cantidad">Cantidad</label>
-        <input type="number" name="cantidad" id="cantidad" placeholder="Cantidad">        
+        <input type="number" min="1" name="cantidad" id="cantidad" placeholder="Cantidad">        
         
         <input type="submit" value="Crear anuncio" class="btn_save">
         </select>         

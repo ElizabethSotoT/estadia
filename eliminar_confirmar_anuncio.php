@@ -37,7 +37,7 @@ session_start();
 			while ($data=mysqli_fetch_array($query)){
 				$id_anuncio=$data['id_anuncio'];
 				$clave_catastral=$data['clave_catastral'];
-				$calle1=$data['ubicacion'];
+				$ubicacion=$data['ubicacion'];
 				$tipo_anuncio=$data['tipo_anuncio'];
 				
 				}
@@ -65,10 +65,10 @@ session_start();
 			<div class="articulo">
             	<div class="data_delete">
                     <h2>¿Está seguro de eliminar el siguiente anuncio?</h2>
-                    <p>ID:<span><?php echo $id_anuncio; ?></span></p>
-                    <p>Clave catastral:<span><?php echo $clave_catastral; ?></span></p>
-                    <p>Ubicación:<span><?php echo $ubicacion; ?></span></p>
-                    <p>Tipo:<span><?php echo $tipo_anuncio; ?></span></p>
+                    <p><strong>ID:</strong><span><?php echo $id_anuncio; ?></span></p>
+                    <p><strong>Clave catastral:</strong><span><?php echo $clave_catastral; ?></span></p>
+                    <p><strong>Ubicación:</strong><span><?php echo $ubicacion; ?></span></p>
+                    <p><strong>Tipo:</strong><span><?php echo $tipo_anuncio; ?></span></p>
                    
                 	<form method="post" action="">
                     	<input type="hidden" name="id_anuncio" value="<?php echo $id_anuncio; ?>">

@@ -16,7 +16,7 @@ include "conexion.php";
 
  
 			<div class="articulo">
-				<H1><i class="fa fa-address-card" ></i> Lista de Personas</H1>
+				<H1><i class="fa fa-address-card" ></i> Personas</H1>
                 <a href="registro_persona.php" class="btn_new">Crear persona</a>
                 <form action="buscar_persona.php" method="get" class="form_search">
                 	<input type="text" name="busqueda" id="busqueda" placeholder="buscar">
@@ -30,6 +30,9 @@ include "conexion.php";
                         <th>Nombre comercial</th>
                         <th>RFC</th>
                         <th>Tipo</th>
+						<th>Calle</th>
+						<th>Número</th>
+						<th>Colonia</th>
                         <th>Opciones</th>
                     </tr>
                     <?php
@@ -45,7 +48,7 @@ include "conexion.php";
 					}
 					$desde=($pagina-1)*$por_pagina;
 					$total_paginas= ceil($total_registro/$por_pagina);
-					$query= mysqli_query($conection,"SELECT id_persona, nombre_responsable, nombre_comercial, rfc, tipo from personas order by id_persona asc			LIMIT $desde,$por_pagina");
+					$query= mysqli_query($conection,"SELECT p.id_persona, p.nombre_responsable, p.nombre_comercial, p.rfc, p.tipo, p.calle, p.numero, a.nombre FROM personas p inner join asentamientos a on p.id_colonia=a.id_asent order by id_persona asc LIMIT $desde,$por_pagina");
 						mysqli_close($conection);
 					$result=mysqli_num_rows($query);
 					if($result>0){
@@ -57,6 +60,9 @@ include "conexion.php";
                         <td><?php echo $data['nombre_comercial']; ?></td>
                         <td><?php echo $data['rfc']; ?></td>
                         <td><?php echo $data['tipo']; ?></td>
+						<td><?php echo $data['calle']; ?></td>
+						<td><?php echo $data['numero']; ?></td>
+						<td><?php echo $data['nombre']; ?></td>
                         <td>
                         	<a class="link_edit" href="editar_persona.php?id=<?php echo $data['id_persona']; ?>">Editar</a>
                             |

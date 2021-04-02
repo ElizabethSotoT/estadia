@@ -15,11 +15,20 @@ include "conexion.php";
 <?php include "includes/wrapp.php"; ?>
 
 			<div class="articulo">
-				<H1><i class="far fa-map"></i> Requerimientos</H1>
+				<?php 
+					$busqueda= strtolower($_REQUEST['busqueda']);
+					
+					if(empty($busqueda)){
+						header ("location: lista_requerimiento.php");
+						mysqli_close($conection);
+					}
+				?>
+				<H1><i class="far fa-map"></i>Requerimientos</H1>
                 <a href="registro_requerimiento.php" class="btn_new">Crear requerimiento</a>
                 <form action="buscar_requerimiento.php" method="get" class="form_search">
                 	<input type="text" name="busqueda" id="busqueda" placeholder="buscar">
                     <input type="submit" value="buscar" class="btn_search">
+                    <a href="lista_requerimiento.php"><img src="img/cerrar.png" class="btn_delete" style="margin-top:7px; margin-left:10px"></a>
                 </form>
                 <div  style="overflow: auto" width="50%">
                 <table>
@@ -45,7 +54,13 @@ include "conexion.php";
 					}
 					$desde=($pagina-1)*$por_pagina;
 					$total_paginas= ceil($total_registro/$por_pagina);
-					$query= mysqli_query($conection,"SELECT r.id_requerimiento, p.nombre_responsable, p.nombre_comercial, r.fecha, r.descripcion FROM requerimientos_anuncios r INNER JOIN personas p ON p.id_persona = r.id_persona order by id_requerimiento asc
+					$query= mysqli_query($conection,"SELECT r.id_requerimiento, p.nombre_responsable, p.nombre_comercial, r.fecha, r.descripcion FROM requerimientos_anuncios r INNER JOIN personas p ON p.id_persona = r.id_persona where(
+						id_requerimiento like '%$busqueda%' or 
+						nombre_responsable like '%$busqueda%' or 
+						nombre_comercial like '%$busqueda%' or 
+						fecha like '%$busqueda%' or 
+						descripcion like '%$busqueda%'  
+						)order by id_requerimiento asc
 					LIMIT $desde,$por_pagina
 					");
 						mysqli_close($conection);

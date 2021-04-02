@@ -62,9 +62,9 @@ session_start();
 			<div class="articulo">
             	<div class="data_delete">
                     <h2>¿Está seguro de eliminar el siguiente pago?</h2>
-                    <p>ID:<span><?php echo $id_pago; ?></span></p>
-                    <p>Importe:<span><?php echo $importe; ?></span></p>
-                    <p>Fecha:<span><?php echo $fecha; ?></span></p>                   
+                    <p><strong>ID:</strong><span><?php echo $id_pago; ?></span></p>
+                    <p><strong>Importe:</strong><span><?php echo $importe; ?></span></p>
+                    <p><strong>Fecha:</strong><span><?php echo $fecha; ?></span></p>                   
                 	<form method="post" action="">
                     	<input type="hidden" name="idpago" value="<?php echo $idpago; ?>">
                     	<a href="lista_pago.php" class="btn_cancel">Cancelar</a>

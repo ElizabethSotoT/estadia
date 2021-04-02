@@ -1,20 +1,14 @@
 <?php
-
-session_start();
-if($_SESSION['rol']!=2)
-	{
-		header("location: ./");
-		
-	}
 	include "conexion.php"
 
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-<head>index.
+<head>
 	<meta charset="UTF-8">
 	<title>Lista de Predios</title>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 	<?php include "includes/scripts.php"; ?>
 </head>
 <body>
@@ -38,6 +32,7 @@ if($_SESSION['rol']!=2)
                 <form action="buscar_predio.php" method="get" class="form_search">
                 	<input type="text" name="busqueda" id="busqueda" placeholder="buscar" value="<?php echo $busqueda; ?>">
                     <input type="submit" value="buscar" class="btn_search">
+                    <a href="lista_predio.php"><img src="img/cerrar.png" class="btn_delete" style="margin-top:7px; margin-left:10px"></a>
                 </form>
                 <div  style="overflow: auto" width="50%">
                 <table>

@@ -113,7 +113,6 @@ session_start();
         <input type="calle1" name="calle1" id="calle1" placeholder="Domicilio del predio, calle" value="<?php echo $calle1; ?>">
         <label for="numero1">Número</label>
         <input type="text" name="numero1" id="numero1" placeholder="Número exterior" value="<?php echo $numero1; ?>"> 
-          
         <label for="colonia">Colonia</label>
         <?php include "conexion.php";
 		$query_rol= mysqli_query($conection, "select * from asentamientos order by nombre1");

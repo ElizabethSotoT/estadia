@@ -37,7 +37,7 @@ session_start();
                                         echo "_Razon:$razon _Fecha_creado:$fecha_creado _Fecha_citatorio:$fecha_citatorio _Id_persona:$id_persona _Id_requerimiento:$id_requerimiento";
 					}	
 			}
-			
+			header('location:lista_citatorio.php');
 			mysqli_close($conection);	
 		}	
 	}
@@ -61,16 +61,56 @@ session_start();
     <hr>
     <div class="alert"><?php echo isset($alert) ? $alert:''; ?></div>
     <form action="" method="post">
-    	<label for="razon">Razon</label>
-        <input type="text" name="razon" id="razon" placeholder="Razon">
+    	<label for="razon">Razón</label>
+        <input type="text" maxlength="255" name="razon" id="razon" placeholder="Razón">
         <label for="fecha_citatorio">Fecha citatorio</label>
         <input type="datetime-local" name="fecha_citatorio" id="fecha_citatorio" placeholder="Fecha citatorio">
-        <label for="id_persona">Persona</label>
-        <input type="text" name="id_persona" id="id_persona" placeholder="Persona">
+        <label for="id_persona">Nombre del responsable</label>
+        <?php include "conexion.php";
+		$query_persona= mysqli_query($conection, "select * from personas order by id_persona asc");
+			mysqli_close($conection);
+		$result_persona= mysqli_num_rows($query_persona);
+
+		?>
+        <select name="id_persona" id="id_persona">
+        	<option value="0">Seleccione una opción</option> 
+			<?php
+                if ($result_persona > 0)
+                {
+            
+                   while($id_persona= mysqli_fetch_array($query_persona)) {
+			?>
+           	<option value="<?php echo $id_persona['id_persona']; ?>"><?php echo $id_persona['nombre_responsable'], " - ", $id_persona['nombre_comercial']?></option>
+            <?php
+					}
+                }
+            
+        ?>
+        </select>
         <label for="id_requerimiento">Requerimiento</label>
-        <input type="text" name="id_requerimiento" id="id_requerimiento" placeholder="Requerimiento">                
+        <?php include "conexion.php";
+		$query_requerimiento= mysqli_query($conection, "select * from requerimientos_anuncios order by id_requerimiento asc");
+			mysqli_close($conection);
+		$result_requerimiento= mysqli_num_rows($query_requerimiento);
+
+		?>
+        <select name="id_requerimiento" id="id_requerimiento"> 
+        	<option value="0">Seleccione una opción</option>
+			<?php
+                if ($result_requerimiento > 0)
+                {
+            
+                   while($id_requerimiento= mysqli_fetch_array($query_requerimiento)) {
+			?>
+            <option value="<?php echo $id_requerimiento['id_requerimiento']; ?>"><?php echo $id_requerimiento['id_requerimiento'], " - ", $id_requerimiento['descripcion']?></option>
+            <?php
+					}
+                }
+            
+        ?> 
+        </select>               
         <input type="submit" value="Crear citatorio" class="btn_save">
-        </select>         
+               
     </form>
     
     </div>

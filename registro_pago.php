@@ -5,17 +5,16 @@ session_start();
 	if(!empty($_POST))
 	{
 		$alert='';
-		if(empty($_POST['id_pago'])|| empty($_POST['concepto']) || empty($_POST['importe']) || empty($_POST['fecha']))
+		if((empty($_POST['concepto']) || empty($_POST['importe'])))
 		{
 			$alert='<p class="msg_error">Todos los campos son obligatorios</p>';
 		} else{
 
-			$id_pago= $_POST['id_pago'];
-			$concepto= $_POST['concepto'];
-			$importe= $_POST['importe'];	
-			$fecha= $_POST['fecha'];
 			
-			$query= mysqli_query($conection, "select * from ordenes_pago where id_pago = '$id_pago'");
+			$concepto= $_POST['concepto'];
+			$importe= $_POST['importe'];
+			
+			$query= mysqli_query($conection, "select * from ordenes_pago where concepto = '$concepto'");
 				//mysqli_close($conection);
 			$result= mysqli_fetch_array($query);
 			if($result > 0){
@@ -23,8 +22,8 @@ session_start();
 			}else{
 				
 				$query_insert= mysqli_query($conection,"INSERT into 
-				ordenes_pago (id_pago, concepto, importe, fecha)
-				values ('$id_pago', '$concepto', '$importe', '$fecha')");
+				ordenes_pago (concepto, importe)
+				values ('$concepto', '$importe')");
 				if($query_insert){
 					$alert='<p class="msg_save">Orden de pago registrado correctamente</p>';
 				}else{
@@ -32,7 +31,7 @@ session_start();
                                         echo "_importe:$importe _fecha:$fecha";
 					}	
 			}
-			
+			header('location:lista_pago.php');
 			mysqli_close($conection);	
 		}	
 	}

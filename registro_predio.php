@@ -18,8 +18,7 @@ session_start();
 			$calle1= $_POST['calle1'];
 			$numero1= $_POST['numero1'];
 			$rol= $_POST['rol'];
-			$usuario_id= 1;//$_SESSION['idUser'];
-			//echo " ";
+			
 			$query= mysqli_query($conection, "select * from predios where clave = '$clave'");
 				//mysqli_close($conection);
 			$result= mysqli_fetch_array($query);

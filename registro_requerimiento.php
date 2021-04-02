@@ -32,7 +32,7 @@ session_start();
                                         echo "_id_requerimiento:$id_requerimiento _id_persona:$id_persona _Fecha:$fecha _Descripcion:$descripcion";
 					}	
 			}
-			
+			header('location:lista_requerimiento.php');
 			mysqli_close($conection);	
 		}	
 	}
@@ -56,7 +56,7 @@ session_start();
     <hr>
     <div class="alert"><?php echo isset($alert) ? $alert:''; ?></div>
     <form action="" method="post">
-       	<label for="id_persona">Nombre del responsable</label>
+       	<label for="id_persona">Nombre del responsable/comercial</label>
         <?php include "conexion.php";
         $query_persona= mysqli_query($conection, "select * from personas order by id_persona asc");
             mysqli_close($conection);
@@ -64,31 +64,30 @@ session_start();
 
         ?>
         <select name="id_persona" id="id_persona"> 
+        	<option value="0">Seleccione una opción</option> 
             <?php
                 if ($result_persona > 0)
                 {
             
                    while($id_persona= mysqli_fetch_array($query_persona)) {
             ?>
-            <option value="<?php echo $id_persona['id_persona']; ?>"><?php echo $id_persona['nombre_responsable'] ?></option>
+            <option value="<?php echo $id_persona['id_persona']; ?>"><?php echo $id_persona['nombre_responsable'], " - ", $id_persona['nombre_comercial']?></option>
             <?php
                     }
                 }
             
         ?>
         <p>Esto es para que se muestren correctamente los list</p>
-        <input type="hidden" placeholder="Forma de pago">
-        <input type="hidden" placeholder="Forma de pago">
-        <input type="hidden" placeholder="Forma de pago">
+        </select>
         <label for="fecha">Fecha</label>
         <input type="date" name="fecha" id="fecha" placeholder="Fecha">
         <label for="descripcion">Descripcion</label>
         <small><i>En relacion con el problema detectado consistente en:</i></small>
-        <input type="text" name="descripcion" id="descripcion" placeholder="Descripcion">       
+        <input type="text" maxlength="255" name="descripcion" id="descripcion" placeholder="Descripcion">       
 
         
         <input type="submit" value="Crear requerimiento" class="btn_save">
-        </select>         
+      
     </form>
     
     </div>

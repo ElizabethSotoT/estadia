@@ -6,7 +6,7 @@ include "conexion.php";
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Lista de requerimientos</title>
+	<title>Lista de Anuncios</title>
 	<?php include "includes/scripts.php"; ?>
 </head>
 <body>
@@ -14,27 +14,41 @@ include "conexion.php";
 	<section class="main">
 <?php include "includes/wrapp.php"; ?>
 
+ 
 			<div class="articulo">
-				<H1><i class="far fa-map"></i> Requerimientos</H1>
-                <a href="registro_requerimiento.php" class="btn_new">Crear requerimiento</a>
-                <form action="buscar_requerimiento.php" method="get" class="form_search">
+				<?php 
+					$busqueda= strtolower($_REQUEST['busqueda']);
+					
+					if(empty($busqueda)){
+						header ("location: lista_anuncio.php");
+						mysqli_close($conection);
+					}
+				?>
+
+				<H1><i class="fa fa-map-marker" aria-hidden="true"></i> Anuncios</H1>
+                <a href="registro_anuncio.php" class="btn_new">Registrar anuncio</a>
+                <form action="buscar_anuncio.php" method="get" class="form_search">
                 	<input type="text" name="busqueda" id="busqueda" placeholder="buscar">
                     <input type="submit" value="buscar" class="btn_search">
+                    <a href="lista_anuncio.php"><img src="img/cerrar.png" class="btn_delete" style="margin-top:7px; margin-left:10px"></a>
                 </form>
                 <div  style="overflow: auto" width="50%">
                 <table>
                 	<tr>
                     	<th>ID</th>
-                    	<th>Nombre responsable</th>
-						<th>Nombre comercial</th>
-                        <th>Fecha</th>
-                        <th>Descripcion</th>
-						<th>PDF</th>  
-                        <th>Acciones</th>   
+                        <th>Clave catastral</th>
+                        <th>Ubicación</th>
+                        <th>Zona</th>
+                        <th>Tipo</th>
+                        <th>Medida 1</th>
+                        <th>Medida 2</th>
+                        <th>Salario minimo</th>
+                        <th>Cantidad</th>
+                        <th>Opciones</th>
                     </tr>
                     <?php
 					//paginador
-					$sql_registe=mysqli_query($conection,"select count(*) as total_registro from requerimientos_anuncios");
+					$sql_registe=mysqli_query($conection,"select count(*) as total_registro from anuncios");
 					$result_register=mysqli_fetch_array($sql_registe);
 					$total_registro=$result_register['total_registro'];
 					$por_pagina=5;
@@ -45,28 +59,39 @@ include "conexion.php";
 					}
 					$desde=($pagina-1)*$por_pagina;
 					$total_paginas= ceil($total_registro/$por_pagina);
-					$query= mysqli_query($conection,"SELECT r.id_requerimiento, p.nombre_responsable, p.nombre_comercial, r.fecha, r.descripcion FROM requerimientos_anuncios r INNER JOIN personas p ON p.id_persona = r.id_persona order by id_requerimiento asc
-					LIMIT $desde,$por_pagina
-					");
-						mysqli_close($conection);
+					$query= mysqli_query($conection,"SELECT id_anuncio, clave_catastral, ubicacion, zona, tipo_anuncio, medida1, medida2, salarios_minimo, cantidad FROM anuncios WHERE (
+						id_anuncio like '%$busqueda%' or
+						clave_catastral like '%$busqueda%' or
+						ubicacion like '%$busqueda%' or
+						zona like '%$busqueda%' or
+						tipo_anuncio like '%$busqueda%' or
+						medida1 like '%$busqueda%' or
+						medida2 like '%$busqueda%' or
+						salarios_minimo like '%$busqueda%' or
+						cantidad like '%$busqueda%' 
+				) 
+					order by id_anuncio asc LIMIT $desde,$por_pagina");
+
+
+					mysqli_close($conection);
 					$result=mysqli_num_rows($query);
 					if($result>0){
 						while ($data= mysqli_fetch_array($query)){
 					?>	
                     <tr>
-                    	<td><?php echo $data['id_requerimiento']; ?></td>
-                        <td><?php echo $data['nombre_responsable']; ?></td>
-						<td><?php echo $data['nombre_comercial']; ?></td>
-                        <td><?php echo $data['fecha']; ?></td>
-                        <td><?php echo $data['descripcion']; ?></td>
-						<td>
-						<a class="link_edit" href="pdf_requerimiento.php?id=<?php echo $data['id_requerimiento']; ?>&nombre_responsable=<?php echo $data['nombre_responsable']; ?>&nombre_comercial=<?php echo $data['nombre_comercial']; ?>&fecha=<?php echo $data['fecha']; ?>&descripcion=<?php echo $data['descripcion']; ?>">PDF</a>
-						</td>
+                    	<td><?php echo $data['id_anuncio']; ?></td>
+                        <td><?php echo $data['clave_catastral']; ?></td>
+                        <td><?php echo $data['ubicacion']; ?></td>
+                        <td><?php echo $data['zona']; ?></td>
+                        <td><?php echo $data['tipo_anuncio']; ?></td>
+                        <td><?php echo $data['medida1']; ?></td>
+                        <td><?php echo $data['medida2']; ?></td>
+                        <td><?php echo $data['salarios_minimo']; ?></td>
+                        <td><?php echo $data['cantidad']; ?></td>
                         <td>
-                        	<a class="link_edit" href="editar_requerimiento.php?id=<?php echo $data['id_requerimiento']; ?>">Editar</a>
+                        	<a class="link_edit" href="editar_anuncio.php?id=<?php echo $data['id_anuncio']; ?>">Editar</a>
                             |
-                            <a class="link_delete" href="eliminar_confirmar_requerimiento.php?id=<?php echo $data['id_requerimiento']; ?>">Eliminar</a>
- 
+                            <a class="link_delete" href="eliminar_confirmar_anuncio.php?id=<?php echo $data['id_anuncio']; ?>">Eliminar</a>
                         </td>
                     </tr> 
                     <?php

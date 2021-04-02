@@ -65,10 +65,10 @@ session_start();
 			<div class="articulo">
             	<div class="data_delete">
                     <h2>¿Está seguro de eliminar siguiente persona?</h2>
-                    <p>Nombre del responsable:<span><?php echo $nombre_responsable; ?></span></p>
-                    <p>Nombre comercial:<span><?php echo $nombre_comercial; ?></span></p>
-                    <p>RFC:<span><?php echo $rfc; ?></span></p>
-                    <p>Tipo:<span><?php echo $tipo; ?></span></p>
+                    <p><strong>Nombre del responsable:</strong><span><?php echo $nombre_responsable; ?></span></p>
+                    <p><strong>Nombre comercial:</strong><span><?php echo $nombre_comercial; ?></span></p>
+                    <p><strong>RFC:</strong><span><?php echo $rfc; ?></span></p>
+                    <p><strong>Tipo:</strong><span><?php echo $tipo; ?></span></p>
                 	<form method="post" action="">
                     	<input type="hidden" name="id_persona" value="<?php echo $id_persona; ?>">
                     	<a href="lista_persona.php" class="btn_cancel">Cancelar</a>

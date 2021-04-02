@@ -29,7 +29,7 @@ session_start();
 	}else{
 
 		$id_citatorio=$_REQUEST['id'];
-		$query= mysqli_query($conection,"SELECT id_citatorio, razon, fecha_creado, fecha_citatorio, id_persona, id_requerimiento from citatorios_anuncios where id_citatorio=$id_citatorio");
+		$query= mysqli_query($conection,"SELECT c.id_citatorio, c.razon, c.fecha_creado, c.fecha_citatorio, c.id_persona, p.nombre_responsable, p.nombre_comercial, c.id_requerimiento, r.id_requerimiento, r.descripcion FROM personas p INNER JOIN citatorios_anuncios c on p.id_persona=c.id_persona INNER JOIN requerimientos_anuncios r on r.id_requerimiento=c.id_requerimiento WHERE c.id_citatorio=$id_citatorio");
 
 		mysqli_close($conection);
 		$result= mysqli_num_rows($query);
@@ -38,8 +38,9 @@ session_start();
 				$id_citatorio=$data['id_citatorio'];
 				$fecha_creado=$data['fecha_creado'];
 				$fecha_citatorio=$data['fecha_citatorio'];
-				$id_persona=$data['id_persona'];
+				$nombre_responsable=$data['nombre_responsable'];
 				$id_requerimiento=$data['id_requerimiento'];
+				$descripcion=$data['descripcion'];
 				}
 		}else{
 			header("location: lista_citatorio.php");
@@ -65,11 +66,12 @@ session_start();
 			<div class="articulo">
             	<div class="data_delete">
                     <h2>¿Está seguro de eliminar el siguiente citatorio?</h2>
-                    <p>ID:<span><?php echo $id_citatorio; ?></span></p>
-                    <p>Fecha:<span><?php echo $fecha_creado; ?></span></p>
-                    <p>Fecha citatorio:<span><?php echo $fecha_citatorio; ?></span></p>
-                    <p>Persona:<span><?php echo $id_persona; ?></span></p>
-                    <p>Requerimiento:<span><?php echo $id_requerimiento; ?></span></p>
+                    <p><strong>ID:</strong><span><?php echo $id_citatorio; ?></span></p>
+                    <p><strong>Fecha:</strong><span><?php echo $fecha_creado; ?></span></p>
+                    <p><strong>Fecha citatorio:</strong><span><?php echo $fecha_citatorio; ?></span></p>
+                    <p><strong>Persona:</strong><span><?php echo $nombre_responsable; ?></span></p>
+                    <p><strong>Requerimiento:</strong><span><?php echo $id_requerimiento; ?></span></p>
+					<p><strong>Requerimiento:</strong><span><?php echo $descripcion; ?></span></p>
                 	<form method="post" action="">
                     	<input type="hidden" name="id_citatorio" value="<?php echo $id_citatorio; ?>">
                     	<a href="lista_citatorio.php" class="btn_cancel">Cancelar</a>
